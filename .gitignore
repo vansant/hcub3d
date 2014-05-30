@@ -1,4 +1,4 @@
 *.pyc
-*.DS_STORE
+.DS_STORE
 settings/
 db.sqlite3
