@@ -2,4 +2,5 @@ from django.shortcuts import render
 
 def home(request):
 	""" Home """
-	return render(request, 'index.html')
+	user = request.user
+	return render(request, 'index.html', {'user': user})

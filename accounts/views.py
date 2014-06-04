@@ -4,13 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_protect
 
-from accounts.forms import LoginForm, RegisterForm
 
 @csrf_protect
 def account_login(request):
 	""" Account Login"""
 	if request.method == "GET":
-		return render(request, 'accounts/login.html', {'form': LoginForm})
+		return render(request, 'accounts/login.html')
 
 	if request.method == "POST":
 		username = request.POST['username']
@@ -21,9 +20,9 @@ def account_login(request):
 				login(request, user)
 				return redirect('account_profile')
 			else:
-				return render(request, 'accounts/login.html', {'form': LoginForm, 'error_message': 'Account is not Active.'})
+				return render(request, 'accounts/login.html', {'error_message': 'Account is not Active.'})
 		else:
-			return render(request, 'accounts/login.html', {'form': LoginForm, 'error_message': 'Username and Password Invalid.'})
+			return render(request, 'accounts/login.html', {'error_message': 'Username and Password Invalid.'})
 
 def account_logout(request):
 	""" Account Logout """
@@ -36,14 +35,19 @@ def account_profile(request):
 	user = request.user
 	return render(request, 'accounts/profile.html', {'user': user})
 
+@csrf_protect
 def account_register(request):
 	""" Account Register """
 	if request.method == "GET":
-		return render(request, 'accounts/register.html', {'form': RegisterForm})
+		return render(request, 'accounts/register.html')
 
 	if request.method == "POST":
 		username = request.POST['username']
 		password = request.POST['password']
+				
+		# Require username and password
+		if not username or not password:
+			return render(request, 'accounts/register.html', {'error_message': 'Username and Password required.'})
 
 		# See if username already exists
 		try:
@@ -53,7 +57,7 @@ def account_register(request):
 		
 		# Create username if not already taken
 		if user is not None:
-			return render(request, 'accounts/register.html', {'form': RegisterForm, 'error_message': 'Username already taken.'})
+			return render(request, 'accounts/register.html', {'error_message': 'Username already taken.'})
 		else:
 			User.objects.create_user(username=username, password=password)
 			return redirect('account_register_success')

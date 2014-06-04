@@ -6,8 +6,14 @@
 {% if error_message %}
     <p>{{ error_message }}</p>
 {% endif %}
+<h2>Sign Up</h2>
 <form method="post" action="."> {% csrf_token %}
-	{{ form }}
+	<label>Username
+		<input type="text" name="username">
+	</label>
+	<label>Password
+		<input type="password" name="password">
+	</label>
 	<input type="submit">
 </form>
 {% endblock %}
