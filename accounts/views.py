@@ -56,6 +56,7 @@ def account_register(request):
 			return render(request, 'accounts/register.html', {'form': RegisterForm, 'error_message': 'Username already taken.'})
 		else:
 			User.objects.create_user(username=username, password=password)
-			return redirect('account_login')
+			return redirect('account_register_success')
             
-
+def account_register_success(request):
+	return render(request, 'accounts/success.html')
